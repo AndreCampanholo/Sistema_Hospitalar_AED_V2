@@ -18,33 +18,33 @@ struct arvore_
 };
 
 // Funções auxiliares privadas
-static int _altura(NO_ARVORE *no)
+int _altura(NO_ARVORE *no)
 {
     if (no == NULL)
         return -1;
     return no->altura;
 }
 
-static int _max(int a, int b)
+int _max(int a, int b)
 {
     return (a > b) ? a : b;
 }
 
-static int _fator_balanceamento(NO_ARVORE *no)
+int _fator_balanceamento(NO_ARVORE *no)
 {
     if (no == NULL)
         return 0;
     return _altura(no->esquerda) - _altura(no->direita);
 }
 
-static void _atualizar_altura(NO_ARVORE *no)
+void _atualizar_altura(NO_ARVORE *no)
 {
     if (no != NULL)
         no->altura = 1 + _max(_altura(no->esquerda), _altura(no->direita));
 }
 
 // Rotações para balanceamento
-static NO_ARVORE *_rotacao_direita(NO_ARVORE *y)
+NO_ARVORE *_rotacao_direita(NO_ARVORE *y)
 {
     NO_ARVORE *x = y->esquerda;
     NO_ARVORE *T2 = x->direita;
@@ -58,7 +58,7 @@ static NO_ARVORE *_rotacao_direita(NO_ARVORE *y)
     return x;
 }
 
-static NO_ARVORE *_rotacao_esquerda(NO_ARVORE *x)
+NO_ARVORE *_rotacao_esquerda(NO_ARVORE *x)
 {
     NO_ARVORE *y = x->direita;
     NO_ARVORE *T2 = y->esquerda;
@@ -73,7 +73,7 @@ static NO_ARVORE *_rotacao_esquerda(NO_ARVORE *x)
 }
 
 // Inserção recursiva
-static NO_ARVORE *_inserir_recursivo(NO_ARVORE *no, PACIENTE *paciente, bool *inserido)
+NO_ARVORE *_inserir_recursivo(NO_ARVORE *no, PACIENTE *paciente, bool *inserido)
 {
     if (no == NULL)
     {
@@ -136,7 +136,7 @@ static NO_ARVORE *_inserir_recursivo(NO_ARVORE *no, PACIENTE *paciente, bool *in
 }
 
 // Busca recursiva
-static PACIENTE *_buscar_recursivo(NO_ARVORE *no, int id)
+PACIENTE *_buscar_recursivo(NO_ARVORE *no, int id)
 {
     if (no == NULL)
         return NULL;
@@ -152,7 +152,7 @@ static PACIENTE *_buscar_recursivo(NO_ARVORE *no, int id)
 }
 
 // Busca do nó mínimo
-static NO_ARVORE *_encontrar_minimo(NO_ARVORE *no)
+NO_ARVORE *_encontrar_minimo(NO_ARVORE *no)
 {
     while (no != NULL && no->esquerda != NULL)
         no = no->esquerda;
@@ -160,7 +160,7 @@ static NO_ARVORE *_encontrar_minimo(NO_ARVORE *no)
 }
 
 // Remoção recursiva
-static NO_ARVORE *_remover_recursivo(NO_ARVORE *no, int id, bool *removido)
+NO_ARVORE *_remover_recursivo(NO_ARVORE *no, int id, bool *removido)
 {
     if (no == NULL)
         return NULL;
@@ -238,7 +238,7 @@ static NO_ARVORE *_remover_recursivo(NO_ARVORE *no, int id, bool *removido)
 }
 
 // Limpeza recursiva
-static void _apagar_recursivo(NO_ARVORE *no)
+void _apagar_recursivo(NO_ARVORE *no)
 {
     if (no != NULL)
     {

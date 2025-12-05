@@ -69,13 +69,7 @@ bool SAVE(ARVORE *arvore, FILA_PRIORIDADE *fila)
     if (temp != NULL)
     {
         int idx = 0;
-        // Infelizmente a árvore não tem iteração linear fácil
-        // Vamos usar um workaround: salvamos os IDs e depois recuperamos
-        // Por simplicidade, salvamos pacientes individuais
     }
-
-    // Abordagem simplificada: salvamos dados da fila
-    // A árvore será reconstruída quando carregarmos os pacientes
 
     // Salva fila de prioridade
     FILE *fp_fila = fopen(ARQUIVO_FILA, "wb");

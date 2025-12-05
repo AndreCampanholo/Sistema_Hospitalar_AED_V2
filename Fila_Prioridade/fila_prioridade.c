@@ -8,7 +8,7 @@
 typedef struct elemento_fila_
 {
     PACIENTE *paciente;
-    int prioridade; // 5 = máxima, 1 = mínima
+    int prioridade;   // 5 = máxima, 1 = mínima
     time_t timestamp; // Para desempate por ordem de chegada
 } ELEMENTO_FILA;
 
@@ -20,23 +20,23 @@ struct fila_prioridade_
 };
 
 // Funções auxiliares privadas
-static int _pai(int i)
+int _pai(int i)
 {
     return (i - 1) / 2;
 }
 
-static int _filho_esquerdo(int i)
+int _filho_esquerdo(int i)
 {
     return 2 * i + 1;
 }
 
-static int _filho_direito(int i)
+int _filho_direito(int i)
 {
     return 2 * i + 2;
 }
 
 // Comparação: retorna true se e1 deve estar acima de e2 no heap
-static bool _comparar_prioridade(ELEMENTO_FILA e1, ELEMENTO_FILA e2)
+bool _comparar_prioridade(ELEMENTO_FILA e1, ELEMENTO_FILA e2)
 {
     if (e1.prioridade != e2.prioridade)
         return e1.prioridade > e2.prioridade; // Maior prioridade primeiro
@@ -44,7 +44,7 @@ static bool _comparar_prioridade(ELEMENTO_FILA e1, ELEMENTO_FILA e2)
         return e1.timestamp < e2.timestamp; // Mesma prioridade: menor timestamp primeiro (chegou antes)
 }
 
-static void _trocar(ELEMENTO_FILA *a, ELEMENTO_FILA *b)
+void _trocar(ELEMENTO_FILA *a, ELEMENTO_FILA *b)
 {
     ELEMENTO_FILA temp = *a;
     *a = *b;
@@ -52,7 +52,7 @@ static void _trocar(ELEMENTO_FILA *a, ELEMENTO_FILA *b)
 }
 
 // Sobe o elemento para manter propriedade do heap máximo
-static void _sobe(FILA_PRIORIDADE *fila, int indice)
+void _sobe(FILA_PRIORIDADE *fila, int indice)
 {
     while (indice > 0 && _comparar_prioridade(fila->heap[indice], fila->heap[_pai(indice)]))
     {
@@ -62,7 +62,7 @@ static void _sobe(FILA_PRIORIDADE *fila, int indice)
 }
 
 // Desce o elemento para manter propriedade do heap máximo
-static void _desce(FILA_PRIORIDADE *fila, int indice)
+void _desce(FILA_PRIORIDADE *fila, int indice)
 {
     int maior = indice;
     int esq = _filho_esquerdo(indice);

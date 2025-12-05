@@ -95,7 +95,7 @@ bool paciente_set_prioridade(PACIENTE *paciente, int prioridade)
    return false;
 }
 
-const char *paciente_descricao_prioridade(int prioridade)
+char *paciente_descricao_prioridade(int prioridade)
 {
    switch (prioridade)
    {
