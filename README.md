@@ -1,159 +1,120 @@
-# Pronto Socorro SUS - V2
+## Sistema Hospitalar AED - V2
 
-**Disciplina:** SCC0202 - Algoritmos e Estruturas de Dados I  
-**Professores:** Rudinei e JB  
-**Monitores:** Laura e Felipe
+Este projeto simula um sistema de atendimento médico de pacientes em um Pronto Socorro (PS), utilizando Tipos Abstratos de Dados (TADs) em C com eficiência computacional aprimorada através de estruturas de dados balanceadas.
 
-## 📋 Descrição do Projeto
+Desenvolvido por:
+- André Campanholo Paschoalini - 14558061
+- Eduardo Poltroniere da Silva - 16862892
+- Pedro Hamamoto da Palma - 16818280
 
-Sistema de atendimento médico para um Pronto Socorro (PS) que simula um serviço emergencial com gerenciamento eficiente de pacientes. O sistema utiliza **estruturas de dados avançadas** para garantir:
+## Estrutura
 
-- ✅ **Busca eficiente** de pacientes (O(log n))
-- ✅ **Atendimento por prioridade** com desempate por ordem de chegada
-- ✅ **Persistência de dados** em disco
+`main.c` - ponto de entrada e loop do menu.
 
-## 🏗️ Estrutura de Dados
+Diretórios principais / TADs:
+- `TAD_Paciente/` - (`paciente.c`, `paciente.h`) cadastro, busca, remoção e gerenciamento de pacientes (id, nome, prioridade).
+- `Arvore_Binaria/` - (`arvore.c`, `arvore.h`) árvore binária de busca balanceada (AVL) para armazenar pacientes com busca eficiente O(log n).
+- `Fila_Prioridade/` - (`fila_prioridade.c`, `fila_prioridade.h`) fila de prioridade implementada com heap máximo para atendimento por prioridade com desempate por ordem de chegada.
+- `TAD_functions/` - (`functions.c`, `functions.h`) implementa as sete operações do menu e a lógica de negócio (registrar, remover, listar, buscar, mostrar fila, dar alta, sair).
+- `TAD_IO/` - (`IO.c`, `IO.h`) persistência: `SAVE` e `LOAD` para ler/gravar `arvore_pacientes.bin` e `fila_espera.bin`.
 
-### 1. **Árvore Binária de Busca Balanceada (AVL)**
-- Armazena todos os pacientes registrados
-- Permite busca, inserção e remoção em O(log n)
-- Auto-balanceamento para garantir eficiência
+## Principais funcionalidades e onde estão implementadas
 
-### 2. **Fila de Prioridade (Heap Máximo)**
-- Gerencia a fila de espera dos pacientes
-- **5 níveis de prioridade:**
-  - **5** - Emergência (risco de morte)
-  - **4** - Muito Urgente (grave e risco de morte)
-  - **3** - Urgente (gravidade moderada)
-  - **2** - Pouco Urgente (poderia ser atendido em básica)
-  - **1** - Não Urgência (sem risco)
-- Desempate por ordem de chegada (timestamp)
+- Registrar paciente: `TAD_functions/registrar_paciente` — cria `PACIENTE` com prioridade (1-5), insere na `Arvore_Binaria` e em `Fila_Prioridade`.
+- Remover paciente: `TAD_functions/remover_paciente` — só permite apagar paciente se ele NÃO estiver na fila de espera; remove da árvore e apaga o `PACIENTE`.
+- Listar pacientes: `TAD_functions/listar_pacientes` — imprime todos os pacientes da árvore em ordem de ID.
+- Buscar paciente: `TAD_functions/buscar_paciente_por_id` — busca um paciente específico por ID na árvore em O(log n).
+- Mostrar fila: `TAD_functions/mostrar_fila_espera` — imprime a fila de espera ordenada por prioridade e ordem de chegada.
+- Dar alta: `TAD_functions/dar_alta_paciente` — remove o próximo paciente da fila (maior prioridade) e mantém seu registro na árvore.
+- Sair: encerra o programa salvando os dados automaticamente.
+- Salvar/Carregar: `TAD_IO/SAVE` e `TAD_IO/LOAD` carregam e salvam a árvore e fila de pacientes ao iniciar e ao fechar o programa (`main.c`) respectivamente.
 
-## 📁 Estrutura do Projeto
+## Persistência
 
-```
-Trabalho_2/
-├── Arvore_Binaria/
-│   ├── arvore.h
-│   └── arvore.c
-├── Fila_Prioridade/
-│   ├── fila_prioridade.h
-│   └── fila_prioridade.c
-├── TAD_Paciente/
-│   ├── paciente.h
-│   └── paciente.c
-├── TAD_functions/
-│   ├── functions.h
-│   └── functions.c
-├── TAD_IO/
-│   ├── IO.h
-│   └── IO.c
-├── main.c
-├── Makefile
-└── README.md
-```
+- Ao sair (opção de menu), o programa chama `SAVE(arvore, fila)` e grava `arvore_pacientes.bin` e `fila_espera.bin`.
+- Ao iniciar, `LOAD(&arvore, &fila)` tenta recarregar os dados.
 
-## 🎯 Menu de Operações
+## Funções da interface
 
-```
-1 - Registrar paciente
-2 - Remover paciente
-3 - Listar pacientes
-4 - Buscar paciente por ID
-5 - Mostrar fila de espera
-6 - Dar alta ao paciente
-7 - Sair
-```
+1. Registrar paciente
+2. Remover paciente
+3. Listar pacientes
+4. Buscar paciente por ID
+5. Mostrar fila de espera
+6. Dar alta ao paciente
+7. Sair
 
-## 🚀 Como Compilar e Executar
+## Escolha dos TADs
 
-### Compilação simples:
+**TAD Paciente:** O TAD paciente armazena as informações essenciais de um paciente: ID (inteiro único), nome (string) e prioridade (inteiro de 1 a 5). Existem funções de criar, apagar, ler id/nome/prioridade, modificar estes atributos e imprimir as informações de um paciente, todas de custo constante O(1). A prioridade segue a classificação: 5 (Emergência), 4 (Muito Urgente), 3 (Urgente), 2 (Pouco Urgente), 1 (Não Urgência).
+
+**TAD Árvore Binária de Busca Balanceada (AVL):** A árvore AVL foi escolhida para armazenar todos os pacientes do banco de dados, permitindo buscas, inserções e remoções com complexidade O(log n). Cada nó da árvore armazena um ponteiro para `PACIENTE` e ponteiros para os filhos esquerdo e direito. A estrutura inclui auto-balanceamento através de rotações (simples e duplas) mantendo o fator de balanceamento entre -1 e 1. Existem funções de criar, apagar, inserir, remover, buscar, verificar se está vazia, imprimir em ordem (in-ordem e pré-ordem) e contar pacientes. As operações de inserção, remoção e busca possuem complexidade O(log n), enquanto impressão e iteração têm custo O(n).
+
+**TAD Fila de Prioridade (Heap Máximo):** Foi utilizada uma fila de prioridade implementada com heap máximo como estrutura para gerenciar a fila de espera. Cada elemento armazena um `PACIENTE`, sua prioridade (1-5) e um timestamp de chegada para desempate. O heap máximo garante que o paciente com maior prioridade sempre esteja na raiz, e em caso de prioridades iguais, o com menor timestamp (chegou primeiro) tem precedência. A fila tem capacidade configurável (padrão 1000 pacientes) e cresce dinamicamente se necessário. Existem funções de criar, apagar, inserir, remover (do topo), consultar o primeiro, verificar se está vazia/cheia, imprimir ordenado e buscar um paciente específico. As operações de inserção e remoção possuem complexidade O(log n), enquanto busca, impressão e iteração têm custo O(n).
+
+**TAD Functions:** TAD que contém as sete funções da interface do usuário. Esse TAD inclui todos os outros, e usa as funções dele para realizar as operações do hospital. Abaixo, um resumo das funcionalidades de cada uma:
+
+`imprimir_escolha_operacao()`
+Exibe no terminal o menu principal de operações (opções **1 a 7**) e retorna ao programa.
+
+`registrar_paciente(ARVORE arvore, FILA_PRIORIDADE fila)`
+Cadastra um novo paciente no sistema.
+- Lê o **ID** do paciente.
+- Se **já existir paciente com esse ID**, informa erro.
+- Se **não existir**, lê o nome, solicita a **prioridade** (1-5), cria o `PACIENTE`, insere na `Arvore_Binaria` e também na `Fila_Prioridade`.
+
+`remover_paciente(ARVORE arvore, FILA_PRIORIDADE fila)`
+Remove definitivamente um paciente do sistema.
+
+- Lê o **ID**.
+- Se **estiver na FILA_PRIORIDADE**, bloqueia a remoção pois o paciente está aguardando atendimento.
+- Se **não estiver na fila**, remove da árvore e destrói o registro.
+- Se **não existir**, informa que o paciente é inexistente.
+
+`listar_pacientes(ARVORE arvore)`
+Exibe todos os pacientes registrados no sistema.
+
+- Imprime a árvore em ordem (in-ordem), mostrando ID, nome e prioridade de cada paciente.
+- Se a árvore estiver vazia, informa ao usuário.
+
+`buscar_paciente_por_id(ARVORE arvore)`
+Busca um paciente específico pelo seu ID.
+
+- Lê o **ID** a buscar.
+- Realiza busca na árvore com complexidade O(log n).
+- Se encontrado, exibe os dados do paciente.
+- Se não encontrado, informa que o paciente inexiste.
+
+`mostrar_fila_espera(FILA_PRIORIDADE fila)`
+Exibe a **fila de espera** ordenada por prioridade.
+
+- Se a fila estiver **vazia**, informa.
+- Caso contrário, imprime todos os pacientes da `FILA_PRIORIDADE` ordenados por prioridade (decrescente) e, para mesma prioridade, por ordem de chegada (crescente).
+
+`dar_alta_paciente(FILA_PRIORIDADE fila)`
+Chama o próximo paciente para atendimento.
+
+- Remove (**dequeue**) o primeiro paciente da `FILA_PRIORIDADE` (maior prioridade).
+- O paciente permanece no banco de dados da árvore para fins de histórico.
+- Se havia alguém, imprime o paciente chamado.
+- Se a fila estiver vazia, informa ao usuário.
+
+**TAD IO:** TAD responsável pela persistência dos dados. As operações de salvar e de carregar as informações são feitas durante o encerramento e o início do programa, respectivamente. Os dados não são salvos on-the-fly. A implementação salva os pacientes em formato binário reconstruindo a árvore e fila automaticamente ao carregar.
+
+## Compilação
+
 ```bash
 make
 ```
 
-### Execução:
+Ou manualmente:
+
+```bash
+gcc -o sistema main.c TAD_Paciente/paciente.c Arvore_Binaria/arvore.c Fila_Prioridade/fila_prioridade.c TAD_functions/functions.c TAD_IO/IO.c
+```
+
+## Execução
+
 ```bash
 ./sistema
 ```
-
-### Compilação + Execução:
-```bash
-make run
-```
-
-### Limpeza de arquivos compilados:
-```bash
-make clean
-```
-
-### Limpeza completa (inclui dados salvos):
-```bash
-make clean-all
-```
-
-### Reconstrução completa:
-```bash
-make rebuild
-```
-
-## 💾 Persistência de Dados
-
-Os dados são salvos automaticamente ao sair do sistema em:
-- `Persistencia_Dados/arvore_pacientes.bin` - Árvore de pacientes
-- `Persistencia_Dados/fila_espera.bin` - Fila de espera
-
-Ao iniciar o programa, o sistema carrega automaticamente os dados salvos anteriormente.
-
-## 📝 Funcionalidades Principais
-
-### 1. Registrar Paciente
-- Insere novo paciente com ID único
-- Solicita nome e classificação de prioridade (1-5)
-- Insere simultaneamente na árvore e fila
-
-### 2. Remover Paciente
-- Remove apenas pacientes que **NÃO** estão aguardando atendimento
-- Mantém registros de pacientes já atendidos
-
-### 3. Listar Pacientes
-- Exibe todos os pacientes registrados (em ordem de ID)
-- Mostra prioridade de cada paciente
-
-### 4. Buscar Paciente por ID
-- Busca rápida em O(log n) através da árvore
-
-### 5. Mostrar Fila de Espera
-- Lista pacientes em ordem de prioridade
-- Destaca ordem de chegada para mesma prioridade
-
-### 6. Dar Alta ao Paciente
-- Remove paciente da fila de espera (próximo a ser atendido)
-- Mantém registros na árvore
-
-## 🔧 Requisitos do Sistema
-
-- Compilador GCC
-- Sistema operacional com suporte a POSIX (Linux/Mac) ou Windows
-- Permissão para criar diretório `Persistencia_Dados/`
-
-## 👥 Complexidade de Tempo
-
-| Operação | Complexidade |
-|----------|--------------|
-| Buscar paciente | O(log n) |
-| Inserir paciente | O(log n) |
-| Remover paciente | O(log n) |
-| Chamar próximo (fila) | O(log n) |
-| Listar todos | O(n) |
-
-## 📄 Notas Importantes
-
-- IDs de pacientes devem ser únicos
-- Sistema valida entrada do usuário
-- Dados persistem entre execuções
-- Estruturas antigas (Lista, Fila FIFO, Pilha) foram removidas para V2
-
----
-
-**Desenvolvido para SCC0202 - USP**
